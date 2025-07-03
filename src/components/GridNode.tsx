@@ -10,7 +10,7 @@ interface GridNodeProps {
 }
 
 const TERRAIN_STYLES: Record<TerrainType, string> = {
-  normal: 'bg-gray-100',
+  normal: 'bg-gray-200',
   sand: 'bg-yellow-200',
   water: 'bg-cyan-200',
   mountain: 'bg-gray-400',
@@ -31,18 +31,18 @@ export const GridNode: React.FC<GridNodeProps> = ({
   isAnimating,
 }) => {
   const getNodeClassName = (): string => {
-    const baseClasses = 'w-7 h-7 border border-gray-600 cursor-pointer transition-all duration-200 flex items-center justify-center text-sm font-bold select-none relative';
+    const baseClasses = 'w-full h-full border border-gray-700 cursor-pointer transition-all duration-200 flex items-center justify-center font-bold select-none relative';
     
     if (node.isStart) return `${baseClasses} bg-green-500 text-white shadow-lg`;
     if (node.isEnd) return `${baseClasses} bg-red-500 text-white shadow-lg`;
-    if (node.isWall) return `${baseClasses} bg-black`;
+    if (node.isWall) return `${baseClasses} bg-gray-900 border-gray-600`;
     if (node.isPath) return `${baseClasses} bg-yellow-400 shadow-lg`;
     if (node.isVisited) {
       // For visited nodes, show green background but preserve terrain styling with border
       return `${baseClasses} bg-green-300 ${node.terrain !== 'normal' ? 'border-2 border-green-500' : ''}`;
     }
     
-    return `${baseClasses} ${TERRAIN_STYLES[node.terrain]} hover:bg-gray-200 hover:shadow-sm`;
+    return `${baseClasses} ${TERRAIN_STYLES[node.terrain]} hover:bg-gray-300 hover:shadow-sm`;
   };
 
   const getNodeContent = (): string => {
@@ -70,6 +70,11 @@ export const GridNode: React.FC<GridNodeProps> = ({
   return (
     <div
       className={`${getNodeClassName()} ${getTextColor()}`}
+      style={{
+        fontSize: 'clamp(4px, 1.2vw, 12px)', // More conservative responsive font size
+        minWidth: '8px',
+        minHeight: '8px',
+      }}
       onMouseDown={() => onMouseDown(node.row, node.col)}
       onMouseEnter={() => onMouseEnter(node.row, node.col)}
       onMouseUp={onMouseUp}
